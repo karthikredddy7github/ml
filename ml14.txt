@@ -1,0 +1,16 @@
+from sklearn.svm import SVC
+from sklearn.decomposition import PCA
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.datasets import load_digits
+
+X_train, y_train = load_digits(return_X_y=True)
+pipe = Pipeline([('pca', PCA()), ('svm', SVC())])
+params_grid = {
+    'pca__n_components': [20, 40, 64],
+    'svm__C': [1, 10, 100, 1000],
+    'svm__kernel': ['linear', 'rbf'],
+    'svm__gamma': [0.001, 0.0001]
+}
+estimator = GridSearchCV(pipe, params_grid).fit(X_train, y_train)
+print(estimator.best_params_, estimator.best_score_)
